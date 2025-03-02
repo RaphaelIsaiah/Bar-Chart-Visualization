@@ -63,21 +63,24 @@ document.addEventListener("DOMContentLoaded", function () {
       .select("#bar-chart")
       .append("div")
       .attr("id", "tooltip")
-      .style("background-color", "lightsteelblue")
-      .style("padding", "5px")
-      .style("border", "1px solid black")
+      .style("background-color", "black")
+      .style("color", "gainsboro")
+      .style("padding", "10px") // Increased padding for better readability
+      .style("border", "1px solid grey")
       .style("border-radius", "5px")
+      .style("box-shadow", "2px 2px 5px rgba(245, 235, 235, 0.48)") // Added shadow effect
       .style("pointer-events", "none")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style("position", "absolute"); // Ensure the tooltip is positioned absolutely
 
     svg
       .selectAll(".bar")
       .on("mouseover", (e, d) => {
         tooltip
           .style("opacity", 1)
-          .html(`X: ${d[0]}<br>Y: ${d[1]}`)
-          .style("left", `${e.pageX + 5}px`)
-          .style("top", `${e.pageY - 28}px`);
+          .html(`Date: ${d[0]}<br>GDP: $${d[1]} Billion`) // Updated content format
+          .style("left", `${e.pageX + 10}px`) // Adjusted position for better visibility
+          .style("top", `${e.pageY - 40}px`); // Adjusted position for better visibility
       })
       .on("mouseout", () => {
         tooltip.style("opacity", 0);

@@ -3,16 +3,22 @@ body {
   background-color: #ebebe8;
   text-align: center;
   word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1.5rem;
 }
 
 #chart-container {
-  width: 100%;
+  width: 80%;
   height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #31352e;
+  box-shadow: 0px 2px 4px 3px #31352e;
   /* background-color: lightsalmon; */
 }
 

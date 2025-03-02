@@ -1,11 +1,32 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: gainsboro;
+  background-color: #ebebe8;
   text-align: center;
-}
-#chart {
+  word-break: break-word;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  padding-top: 1.5rem;
+}
+
+#chart-container {
+  width: 80%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #31352e;
+  box-shadow: 0px 2px 4px 3px #31352e;
+  /* background-color: lightsalmon; */
+}
+
+#bar-chart {
+  width: 95%;
+  height: 90%;
+  place-content: center;
+  font-weight: 600;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  /* background-color: thistle; */
 }

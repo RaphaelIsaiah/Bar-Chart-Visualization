@@ -1,18 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const width = 800;
-  const height = 400;
   const padding = 40;
+  let dataset;
 
-  const svg = d3
+  // Create tooltip element once
+  const tooltip = d3
     .select("#bar-chart")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .append("div")
+    .attr("id", "tooltip")
+    .style("background-color", "#EBEBE8")
+    .style("color", "#31352E")
+    .style("padding", "10px")
+    .style("border", "1px solid #D1E2C4")
+    .style("border-radius", "5px")
+    .style("box-shadow", "2px 2px 5px #31352E")
+    .style("pointer-events", "none")
+    .style("opacity", 0)
+    .style("position", "absolute");
 
+  // Fetch the data
   d3.json(
     "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json"
   ).then((data) => {
-    const dataset = data.data;
+    dataset = data.data;
+    renderChart();
+    // Redraw chart on window resize
+    window.addEventListener("resize", renderChart);
+  });
+
+  function renderChart() {
+    // Remove any existing SVG
+    d3.select("#bar-chart").select("svg").remove();
+
+    const container = d3.select("#bar-chart");
+    const { width, height } = container.node().getBoundingClientRect();
+
+    // Create responsive SVG with viewBox and preserveAspectRatio
+    const svg = container
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
 
     // Scales
     const xScale = d3
@@ -25,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(dataset, (d) => d[1])]) // 0 - highest GDP
+      .domain([0, d3.max(dataset, (d) => d[1])]) // GDP from 0 to max value
       .range([height - padding, padding]);
 
     // Axes
@@ -51,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .enter()
       .append("rect")
       .attr("class", "bar")
+      .style("fill", "#778A35")
       .attr("x", (d) => xScale(new Date(d[0])))
       .attr("y", (d) => yScale(d[1]))
       .attr("width", (width - 2 * padding) / dataset.length)
@@ -64,26 +91,11 @@ document.addEventListener("DOMContentLoaded", function () {
           .html(`Date: ${d[0]}<br>GDP: $${d[1]} Billion`)
           .style("left", `${e.pageX + 10}px`)
           .style("top", `${e.pageY - 40}px`);
-        d3.select(this).style("fill", "ghostwhite");
+        d3.select(this).style("fill", "#31352E");
       })
       .on("mouseout", function () {
         tooltip.style("opacity", 0);
-        d3.select(this).style("fill", "initial");
+        d3.select(this).style("fill", "#778A35");
       });
-
-    // Tooltip
-    const tooltip = d3
-      .select("#bar-chart")
-      .append("div")
-      .attr("id", "tooltip")
-      .style("background-color", "rgba(0, 0, 0, 0.9")
-      .style("color", "gainsboro")
-      .style("padding", "10px")
-      .style("border", "1px solid grey")
-      .style("border-radius", "5px")
-      .style("box-shadow", "2px 2px 5px rgba(245, 235, 235, 0.48)")
-      .style("pointer-events", "none")
-      .style("opacity", 0)
-      .style("position", "absolute");
-  });
+  }
 });

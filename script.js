@@ -55,7 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
       .range([height - padding, padding]);
 
     // Axes
-    const xAxis = d3.axisBottom(xScale);
+    const xAxis = d3
+      .axisBottom(xScale)
+      .ticks(d3.timeYear.every(10)) // Show a tick every 10 years
+      .tickFormat(d3.timeFormat("%Y")); // Format as year only
+
     const yAxis = d3.axisLeft(yScale);
 
     svg
@@ -71,6 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .call(yAxis);
 
     // Bars
+    const barWidth = Math.max((width - 2 * padding) / dataset.length, 2); // Ensure bars are at least 2px wide
+
     svg
       .selectAll(".bar")
       .data(dataset)
@@ -80,22 +86,41 @@ document.addEventListener("DOMContentLoaded", function () {
       .style("fill", "#778A35")
       .attr("x", (d) => xScale(new Date(d[0])))
       .attr("y", (d) => yScale(d[1]))
-      .attr("width", (width - 2 * padding) / dataset.length)
+      .attr("width", barWidth)
       .attr("height", (d) => height - padding - yScale(d[1]))
       .attr("data-date", (d) => d[0])
       .attr("data-gdp", (d) => d[1])
+      .attr("aria-label", (d) => `Date: ${d[0]}, GDP: $${d[1]} Billion`) // Accessibility
       .on("mouseover", function (e, d) {
+        const tooltipWidth = tooltip.node().offsetWidth;
+        const tooltipHeight = tooltip.node().offsetHeight;
+
+        let left = e.pageX + 10;
+        let top = e.pageY - 40;
+
+        // Prevent tooltip overflow
+        if (left + tooltipWidth > window.innerWidth) {
+          left = e.pageX - tooltipWidth - 10;
+        }
+        if (top < 0) {
+          top = e.pageY + 10;
+        }
+
         tooltip
           .attr("data-date", d[0])
           .style("opacity", 1)
-          .html(`Date: ${d[0]}<br>GDP: $${d[1]} Billion`)
-          .style("left", `${e.pageX + 10}px`)
-          .style("top", `${e.pageY - 40}px`);
+          .html(`${d[0]}<br>$${d[1]} Billion`)
+          .style("left", `${left}px`)
+          .style("top", `${top}px`);
+
         d3.select(this).style("fill", "#31352E");
       })
       .on("mouseout", function () {
         tooltip.style("opacity", 0);
-        d3.select(this).style("fill", "#778A35");
+        d3.select(this)
+          .transition()
+          .duration(50)
+          .style("fill", "#778A35");
       });
   }
 });

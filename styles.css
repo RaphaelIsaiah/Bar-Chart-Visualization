@@ -2,12 +2,16 @@ body {
   font-family: Arial, sans-serif;
   background-color: #ebebe8;
   text-align: center;
-  word-break: break-word;
+  word-wrap: break-word;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding-top: 1.5rem;
+}
+
+h1 {
+  font-size: clamp(1.4rem, 4vw, 1.6rem);
 }
 
 #chart-container {
@@ -19,6 +23,7 @@ body {
   align-items: center;
   color: #31352e;
   box-shadow: 0px 2px 4px 3px #31352e;
+  padding: 0.5rem;
   /* background-color: lightsalmon; */
 }
 
@@ -29,4 +34,15 @@ body {
   font-weight: 600;
   font-size: clamp(1rem, 2vw, 1.2rem);
   /* background-color: thistle; */
+}
+
+.info {
+  /* background-color: burlywood; */
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+}
+
+a {
+  text-decoration: none;
+  color: #31352e;
+  font-weight: 600;
 }

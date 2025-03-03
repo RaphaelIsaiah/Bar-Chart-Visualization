@@ -106,10 +106,31 @@ document.addEventListener("DOMContentLoaded", function () {
           top = e.pageY + 10;
         }
 
+        // Format date to quarters
+        const date = new Date(d[0]);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        let quarter;
+
+        if (month <= 2) {
+          quarter = "Q1";
+        } else if (month <= 5) {
+          quarter = "Q2";
+        } else if (month <= 8) {
+          quarter = "Q3";
+        } else {
+          quarter = "Q4";
+        }
+
+        // Format GDP value to billions with commas
+        const gdpFormatted = `$${(d[1] / 1000)
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} Billion`;
+
         tooltip
           .attr("data-date", d[0])
           .style("opacity", 1)
-          .html(`${d[0]}<br>$${d[1]} Billion`)
+          .html(`${year} ${quarter}<br>${gdpFormatted}`)
           .style("left", `${left}px`)
           .style("top", `${top}px`);
 
@@ -117,10 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .on("mouseout", function () {
         tooltip.style("opacity", 0);
-        d3.select(this)
-          .transition()
-          .duration(50)
-          .style("fill", "#778A35");
+        d3.select(this).transition().duration(50).style("fill", "#778A35");
       });
   }
 });

@@ -51,6 +51,6 @@ a {
 @media (max-width: 600px) {
   #chart-container {
     width: 98%;
-    height: 80vh; /* Adjusted height for smaller screens */
+    height: 80vh;
   }
 }
